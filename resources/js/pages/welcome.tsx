@@ -30,6 +30,7 @@ export default function Welcome() {
 
                     <div className="flex items-center gap-2">
                         <Calendar className="h-5 w-5 text-zinc-400" />
+
                         <select
                             value={sortOrder}
                             onChange={(e) =>

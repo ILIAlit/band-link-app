@@ -1,35 +1,45 @@
-import { Head, Link } from '@inertiajs/react';
-import {
-    TrendingUp,
-    Heart,
-    Share2,
-    Music,
-    Eye,
-    BarChart3,
-    Users,
-} from 'lucide-react';
+import { Head, Link, usePage } from '@inertiajs/react';
+
+import { Music, Eye, BarChart3, Users, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { mockArtists, mockReleases } from '@/data/mockData';
 
+// type DashboardProps = {
+//     auth: {
+//         user: {
+//             name: string;
+//         };
+//     };
+//     profile?: {
+//         id: number;
+//         about?: string;
+//         instagram?: string;
+//         twitter?: string;
+//         youtube?: string;
+//     };
+// };
+
 export default function Dashboard() {
+    const page = usePage<{
+        auth: { user: { name: string } };
+        profile?: {
+            id: number;
+            about?: string;
+            instagram?: string;
+            twitter?: string;
+            youtube?: string;
+        };
+    }>();
+
+    const { auth, profile } = page.props;
+    const user = auth.user;
+    console.log('Profile:', profile);
+    console.log('Auth:', auth);
+
     const currentArtist = mockArtists[0];
     const myReleases = mockReleases.filter(
         (r) => r.artist.id === currentArtist.id,
     );
-
-    const totalStreams = myReleases.reduce(
-        (sum, r) => sum + (r.stats?.streams || 0),
-        0,
-    );
-    const totalLikes = myReleases.reduce(
-        (sum, r) => sum + (r.stats?.likes || 0),
-        0,
-    );
-    const totalShares = myReleases.reduce(
-        (sum, r) => sum + (r.stats?.shares || 0),
-        0,
-    );
-
     const [timeRange, setTimeRange] = useState<'7d' | '30d' | 'all'>('30d');
 
     return (
@@ -44,64 +54,6 @@ export default function Dashboard() {
                         Welcome back, {currentArtist.name}
                     </p>
                 </div>
-
-                <div className="mb-8 grid gap-6 md:grid-cols-4">
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                        <div className="mb-4 flex items-center justify-between">
-                            <div className="rounded-lg bg-purple-600/20 p-3">
-                                <TrendingUp className="h-6 w-6 text-purple-400" />
-                            </div>
-                            <span className="text-xs text-green-400">
-                                +12.5%
-                            </span>
-                        </div>
-                        <p className="mb-1 text-2xl font-bold">
-                            {(totalStreams / 1000).toFixed(0)}K
-                        </p>
-                        <p className="text-sm text-zinc-500">Total Streams</p>
-                    </div>
-
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                        <div className="mb-4 flex items-center justify-between">
-                            <div className="rounded-lg bg-pink-600/20 p-3">
-                                <Heart className="h-6 w-6 text-pink-400" />
-                            </div>
-                            <span className="text-xs text-green-400">
-                                +8.3%
-                            </span>
-                        </div>
-                        <p className="mb-1 text-2xl font-bold">
-                            {(totalLikes / 1000).toFixed(1)}K
-                        </p>
-                        <p className="text-sm text-zinc-500">Total Likes</p>
-                    </div>
-
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                        <div className="mb-4 flex items-center justify-between">
-                            <div className="rounded-lg bg-blue-600/20 p-3">
-                                <Share2 className="h-6 w-6 text-blue-400" />
-                            </div>
-                            <span className="text-xs text-green-400">
-                                +15.7%
-                            </span>
-                        </div>
-                        <p className="mb-1 text-2xl font-bold">{totalShares}</p>
-                        <p className="text-sm text-zinc-500">Total Shares</p>
-                    </div>
-
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                        <div className="mb-4 flex items-center justify-between">
-                            <div className="rounded-lg bg-green-600/20 p-3">
-                                <Music className="h-6 w-6 text-green-400" />
-                            </div>
-                        </div>
-                        <p className="mb-1 text-2xl font-bold">
-                            {myReleases.length}
-                        </p>
-                        <p className="text-sm text-zinc-500">Total Releases</p>
-                    </div>
-                </div>
-
                 <div className="mb-8 grid gap-6 lg:grid-cols-3">
                     <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 lg:col-span-2">
                         <div className="mb-6 flex items-center justify-between">
@@ -256,42 +208,89 @@ export default function Dashboard() {
                         </div>
 
                         <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-                            <h2 className="mb-4 text-xl font-bold">
-                                Recent Activity
-                            </h2>
-                            <div className="space-y-3 text-sm">
-                                <div className="flex items-start gap-3">
-                                    <div className="mt-1.5 h-2 w-2 rounded-full bg-purple-500"></div>
-                                    <div>
-                                        <p className="text-zinc-300">
-                                            New follower on Spotify
-                                        </p>
-                                        <p className="text-xs text-zinc-600">
-                                            2 hours ago
-                                        </p>
-                                    </div>
+                            <div className="mb-4 flex items-center justify-between">
+                                <div className="rounded-lg bg-green-600/20 p-3">
+                                    <Music className="h-6 w-6 text-green-400" />
                                 </div>
-                                <div className="flex items-start gap-3">
-                                    <div className="mt-1.5 h-2 w-2 rounded-full bg-pink-500"></div>
-                                    <div>
-                                        <p className="text-zinc-300">
-                                            Midnight Echoes reached 100K streams
-                                        </p>
-                                        <p className="text-xs text-zinc-600">
-                                            1 day ago
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <div className="mt-1.5 h-2 w-2 rounded-full bg-blue-500"></div>
-                                    <div>
-                                        <p className="text-zinc-300">
-                                            Added to 50 new playlists
-                                        </p>
-                                        <p className="text-xs text-zinc-600">
-                                            3 days ago
-                                        </p>
-                                    </div>
+                            </div>
+                            <p className="mb-1 text-2xl font-bold">
+                                {myReleases.length}
+                            </p>
+                            <p className="text-sm text-zinc-500">
+                                Total Releases
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="md-8">
+                    <div className="relative mb-12">
+                        <div className="h-48 rounded-2xl bg-gradient-to-r from-purple-900 to-pink-900"></div>
+                        <div className="absolute -bottom-16 left-8 flex items-end gap-6">
+                            <img
+                                src={'#'}
+                                alt={'#'}
+                                className="h-32 w-32 rounded-full border-4 border-zinc-950 object-cover shadow-xl"
+                            />
+                            <div className="mb-4">
+                                <h1 className="mb-2 text-4xl font-bold text-white">
+                                    {user.name}
+                                </h1>
+                                <p className="text-zinc-300">{'2'} releases</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="">
+                        <div className="mb-8 grid gap-6 lg:grid-cols-2">
+                            <div className="rounded-xl bg-zinc-900 p-6">
+                                <h2 className="mb-3 text-xl font-bold">
+                                    About
+                                </h2>
+                                <p className="text-zinc-400">
+                                    {profile?.about ||
+                                        'No information available.'}
+                                </p>
+                            </div>
+
+                            <div className="rounded-xl bg-zinc-900 p-6">
+                                <h2 className="mb-3 text-xl font-bold">
+                                    Social Media
+                                </h2>
+                                <div className="flex flex-wrap gap-3">
+                                    <a
+                                        key={'instagram'}
+                                        href={profile?.instagram || '#'}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-3 transition-colors hover:bg-zinc-700"
+                                    >
+                                        <span className="text-xl">📷</span>
+                                        <span>Instagram</span>
+                                        <ExternalLink className="h-4 w-4 text-zinc-600" />
+                                    </a>
+                                    <a
+                                        key={'twitter'}
+                                        href={profile?.twitter || '#'}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-3 transition-colors hover:bg-zinc-700"
+                                    >
+                                        <span className="text-xl">🐦</span>
+                                        <span>Twitter</span>
+                                        <ExternalLink className="h-4 w-4 text-zinc-600" />
+                                    </a>
+                                    <a
+                                        key={'youtube'}
+                                        href={profile?.youtube || '#'}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-3 transition-colors hover:bg-zinc-700"
+                                    >
+                                        <span className="text-xl">▶️</span>
+                                        <span>YouTube</span>
+                                        <ExternalLink className="h-4 w-4 text-zinc-600" />
+                                    </a>
                                 </div>
                             </div>
                         </div>

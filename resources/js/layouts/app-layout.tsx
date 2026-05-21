@@ -1,7 +1,8 @@
 import { Link, usePage } from '@inertiajs/react';
+import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { LayoutDashboard } from 'lucide-react';
 import AppLogoIcon from '@/components/app-logo-icon';
-import { dashboard, home, login } from '@/routes';
+import { dashboard, home, login, logout } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
 
 export default function AppLayout({
@@ -14,8 +15,6 @@ export default function AppLayout({
     const { auth } = page.props;
     const { url } = page;
     const isDashboard = url.startsWith('/dashboard');
-
-    console.log(children);
 
     return (
         <>
@@ -45,17 +44,25 @@ export default function AppLayout({
                                     Releases
                                 </Link>
                                 {auth.user ? (
-                                    <Link
-                                        href={dashboard()}
-                                        className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-colors ${
-                                            isDashboard
-                                                ? 'bg-purple-600 text-white'
-                                                : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-                                        }`}
-                                    >
-                                        <LayoutDashboard className="h-4 w-4" />
-                                        Dashboard
-                                    </Link>
+                                    <DropdownMenu>
+                                        <Link
+                                            href={dashboard()}
+                                            className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-colors ${
+                                                isDashboard
+                                                    ? 'bg-purple-600 text-white'
+                                                    : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                                            }`}
+                                        >
+                                            <LayoutDashboard className="h-4 w-4" />
+                                            Dashboard
+                                        </Link>
+                                        <Link
+                                            href={logout()}
+                                            className="flex items-center gap-2 rounded-lg px-4 py-2 text-zinc-300 hover:bg-zinc-700"
+                                        >
+                                            Logout
+                                        </Link>
+                                    </DropdownMenu>
                                 ) : (
                                     <Link
                                         href={login()}
