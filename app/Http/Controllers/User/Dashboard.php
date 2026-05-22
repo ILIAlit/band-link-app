@@ -45,11 +45,18 @@ class Dashboard extends Controller
     public function update(Request $request)
     {
 
+
         $request->validate([
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
-        $imgPath = app(ImageUploader::class)->upload($request->avatar);
+        $imgPath = $request->avatarSrc;
+
+        if ($request->avatar) {
+            $imgPath = app(ImageUploader::class)->upload($request->avatar);
+        }
+
+
 
         $userId = Auth::user()->id;
         $user = User::find($userId);

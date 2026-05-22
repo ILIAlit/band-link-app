@@ -3,13 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\User\Dashboard;
+use App\Http\Controllers\User\Releases;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Log;
 
 Route::inertia('/', 'welcome')->name('home');
-Route::get('/release/{id}', function ($id) {
-    return Inertia::render('release', ['id' => $id]);
-})->name('release');
 
 Route::get('/dashboard', Dashboard::class)
     ->middleware('auth')
@@ -17,6 +14,10 @@ Route::get('/dashboard', Dashboard::class)
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/dashboard', [Dashboard::class, 'update'])->name('dashboard.update');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/release', [Releases::class, 'create'])->name('release.create');
 });
 
 Route::post('/logout', Logout::class)

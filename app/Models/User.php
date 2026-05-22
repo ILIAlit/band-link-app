@@ -39,4 +39,9 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->hasOne(Profile::class);
     }
+
+    public function releases()
+    {
+        return $this->hasMany(Release::class);
+    }
 }
