@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Actions\Fortify\ImageUploader;
 
 class Dashboard extends Controller
 {
@@ -47,10 +48,8 @@ class Dashboard extends Controller
         $request->validate([
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
-        $imageName = time() . '.' . $request->avatar->extension();
-        $request->avatar->move(public_path('images'), $imageName);
-        $imgPath = env('APP_URL') . '/images/' . $imageName;
 
+        $imgPath = app(ImageUploader::class)->upload($request->avatar);
 
         $userId = Auth::user()->id;
         $user = User::find($userId);
