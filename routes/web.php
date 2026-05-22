@@ -16,7 +16,7 @@ Route::get('/dashboard', Dashboard::class)
     ->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    //Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::put('/dashboard', [Dashboard::class, 'update'])->name('dashboard.update');
 });
 
 Route::post('/logout', Logout::class)

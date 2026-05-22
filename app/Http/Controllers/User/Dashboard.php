@@ -42,6 +42,7 @@ class Dashboard extends Controller
 
     public function update(Request $request)
     {
+        Log::info($request->about);
         $userId = Auth::user()->id;
         $user = User::find($userId);
         if (!$user) {
@@ -51,7 +52,13 @@ class Dashboard extends Controller
         $userProfile = $user->profile;
         if (!$userProfile) {
             Log::error("Profile not found for user ID: $userId");
-            return Inertia::render('dashboard');
         }
+        $userProfile->update([
+            'about' => $request->about,
+            'instagram' => $request->instagram,
+            'twitter' => $request->twitter,
+            'youtube' => $request->youtube,
+        ]);
+        return redirect()->route('dashboard');
     }
 }
