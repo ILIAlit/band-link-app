@@ -36,13 +36,22 @@ class Dashboard extends Controller
                 'instagram' => $userProfile->instagram,
                 'twitter' => $userProfile->twitter,
                 'youtube' => $userProfile->youtube,
+                'avatar' => $userProfile->avatar,
             ],
         ]);
     }
 
     public function update(Request $request)
     {
-        Log::info($request->about);
+
+        $request->validate([
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        ]);
+        $imageName = time() . '.' . $request->avatar->extension();
+        $request->avatar->move(public_path('images'), $imageName);
+        $imgPath = env('APP_URL') . '/images/' . $imageName;
+
+
         $userId = Auth::user()->id;
         $user = User::find($userId);
         if (!$user) {
@@ -58,6 +67,7 @@ class Dashboard extends Controller
             'instagram' => $request->instagram,
             'twitter' => $request->twitter,
             'youtube' => $request->youtube,
+            'avatar' => $imgPath,
         ]);
         return redirect()->route('dashboard');
     }

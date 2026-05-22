@@ -37,8 +37,8 @@ export default function UserProfile({
                 <div className="h-48 rounded-2xl bg-gradient-to-r from-purple-900 to-pink-900"></div>
                 <div className="absolute -bottom-16 left-8 flex items-end gap-6">
                     <img
-                        src={'#'}
-                        alt={'#'}
+                        src={profile?.avatar}
+                        alt={`${user.name}'s avatar`}
                         className="h-32 w-32 rounded-full border-4 border-zinc-950 object-cover shadow-xl"
                     />
 
@@ -127,6 +127,36 @@ export default function UserProfile({
                                 {({ processing, errors }) => (
                                     <>
                                         <div className="grid gap-6">
+                                            <div className="grid gap-2">
+                                                <Label htmlFor="name">
+                                                    Avatar
+                                                </Label>
+                                                <Input
+                                                    id="avatar"
+                                                    type="file"
+                                                    autoFocus
+                                                    tabIndex={0}
+                                                    autoComplete="avatar"
+                                                    name="avatar"
+                                                    placeholder="avatar"
+                                                />
+                                                <Input
+                                                    id="avatarSrc"
+                                                    type="text"
+                                                    autoFocus
+                                                    tabIndex={8}
+                                                    autoComplete="avatarSrc"
+                                                    name="avatarSrc"
+                                                    placeholder="avatar URL"
+                                                    value={
+                                                        profile?.avatar || ''
+                                                    }
+                                                />
+                                                <InputError
+                                                    message={errors.about}
+                                                    className="mt-2"
+                                                />
+                                            </div>
                                             <div className="grid gap-2">
                                                 <Label htmlFor="name">
                                                     About

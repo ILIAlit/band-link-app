@@ -1,7 +1,6 @@
 export interface Release {
     id: string;
     title: string;
-
     coverUrl: string;
     releaseDate: string;
     streamingLinks: StreamingLink[];
@@ -19,4 +18,5 @@ export interface Profile {
     instagram?: string;
     twitter?: string;
     youtube?: string;
+    avatar?: string;
 }

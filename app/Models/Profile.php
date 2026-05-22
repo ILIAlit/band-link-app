@@ -15,6 +15,7 @@ class Profile extends Model
         'instagram',
         'twitter',
         'youtube',
+        'avatar',
     ];
 
     protected $casts = [
