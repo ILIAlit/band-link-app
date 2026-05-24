@@ -1,8 +1,8 @@
 import { Head, usePage } from '@inertiajs/react';
 import { Form } from '@inertiajs/react';
 import UserProfile from '@/components/dashboard/user-profile';
-import UserReleaseList from '@/components/dashboard/user-release-list';
-import UserReleaseState from '@/components/dashboard/user-release-state';
+// import UserReleaseList from '@/components/dashboard/user-release-list';
+// import UserReleaseState from '@/components/dashboard/user-release-state';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,7 +16,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { mockArtists, mockReleases } from '@/data/mockData';
+
 import release from '@/routes/release';
 import type { Profile, Auth } from '@/types';
 
@@ -29,11 +29,6 @@ export default function Dashboard() {
     const { auth, profile } = page.props;
     const user = auth.user;
 
-    const currentArtist = mockArtists[0];
-    const myReleases = mockReleases.filter(
-        (r) => r.artist.id === currentArtist.id,
-    );
-
     return (
         <>
             <Head title="Dashboard" />
@@ -44,7 +39,7 @@ export default function Dashboard() {
                             Dashboard
                         </h1>
                         <p className="text-zinc-400">
-                            Welcome back, {currentArtist.name}
+                            Welcome back, {user.name}
                         </p>
                     </div>
                     <div className={'flex justify-center'}>
@@ -227,8 +222,8 @@ export default function Dashboard() {
                     </div>
                 </div>
                 <div className="mb-8 grid gap-6 lg:grid-cols-3">
-                    <UserReleaseList myReleases={myReleases} />
-                    <UserReleaseState myReleases={myReleases} />
+                    {/* <UserReleaseList myReleases={myReleases} />
+                    <UserReleaseState myReleases={myReleases} /> */}
                 </div>
                 <UserProfile user={user} profile={profile} />
             </div>

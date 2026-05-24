@@ -1,14 +1,23 @@
-import { Head, Link } from '@inertiajs/react';
-import { Calendar, TrendingUp } from 'lucide-react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { Calendar } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { mockReleases } from '@/data/mockData';
+//import { mockReleases } from '@/data/mockData';
+import release from '@/routes/release';
+import type { Release, Auth } from '@/types';
 
 export default function Welcome() {
+    const page = usePage<{
+        auth: Auth;
+        releases: Release[];
+    }>();
+    const { releases } = page.props;
+
+    console.log(releases);
     const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
     const sortedReleases = useMemo(() => {
-        return [...mockReleases].sort((a, b) => {
-            const dateA = new Date(a.releaseDate).getTime();
-            const dateB = new Date(b.releaseDate).getTime();
+        return [...releases].sort((a, b) => {
+            const dateA = new Date(a.release_date).getTime();
+            const dateB = new Date(b.release_date).getTime();
 
             return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
         });
@@ -47,34 +56,35 @@ export default function Welcome() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-4">
-                    {sortedReleases.map((release) => (
+                    {sortedReleases.map((releaseItem) => (
                         <Link
-                            key={release.id}
+                            href={release.getone(releaseItem.id)}
+                            key={releaseItem.id}
                             className="group overflow-hidden rounded-xl bg-zinc-900 transition-all duration-300 hover:scale-105 hover:bg-zinc-800 hover:shadow-xl hover:shadow-purple-900/20"
                         >
                             <div className="aspect-square overflow-hidden">
                                 <img
-                                    src={release.coverUrl}
-                                    alt={release.title}
+                                    src={releaseItem.cover_image}
+                                    alt={releaseItem.title}
                                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                                 />
                             </div>
 
                             <div className="p-4">
                                 <h3 className="mb-1 text-lg font-bold transition-colors group-hover:text-purple-400">
-                                    {release.title}
+                                    {releaseItem.title}
                                 </h3>
                                 <p className="mb-3 text-sm text-zinc-400">
-                                    {release.artist.name}
+                                    {releaseItem.user?.name}
                                 </p>
 
                                 <div className="flex items-center justify-between text-xs text-zinc-500">
                                     <span>
                                         {new Date(
-                                            release.releaseDate,
+                                            releaseItem.release_date,
                                         ).toLocaleDateString('ru-RU')}
                                     </span>
-                                    {release.stats && (
+                                    {/* {release.stats && (
                                         <span className="flex items-center gap-1">
                                             <TrendingUp className="h-3 w-3" />
                                             {(
@@ -82,7 +92,7 @@ export default function Welcome() {
                                             ).toFixed(0)}
                                             K
                                         </span>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </Link>

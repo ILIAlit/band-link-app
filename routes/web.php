@@ -6,7 +6,13 @@ use App\Http\Controllers\User\Dashboard;
 use App\Http\Controllers\User\Releases;
 use Inertia\Inertia;
 
-Route::inertia('/', 'welcome')->name('home');
+//Route::inertia('/', 'welcome')->name('home');
+Route::get('/', [Releases::class, 'get'])->name('home');
+Route::get('/release/{id}', [Releases::class, 'getOne'])->name('release.getone');
+Route::get('/profile/{user_id}', [Dashboard::class, 'getUserProfile'])->name('profile.get');
+
+
+
 
 Route::get('/dashboard', Dashboard::class)
     ->middleware('auth')

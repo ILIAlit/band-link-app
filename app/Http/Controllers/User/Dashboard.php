@@ -29,7 +29,6 @@ class Dashboard extends Controller
             Log::error("Profile not found for user ID: $userId");
             return Inertia::render('dashboard');
         }
-        Log::info("User ID: $userId, Profile ID: {$userProfile->id}");
         return Inertia::render('dashboard', [
             'profile' => [
                 'id' => $userProfile->id,
@@ -39,6 +38,29 @@ class Dashboard extends Controller
                 'youtube' => $userProfile->youtube,
                 'avatar' => $userProfile->avatar,
             ],
+        ]);
+    }
+
+    public function getUserProfile(Request $request)
+    {
+        $user = User::find($request->user_id);
+        if (!$user) {
+            Log::error("User not found with ID: {$request->user_id}");
+            abort(404, 'User not found');
+        }
+        $profile = $user->profile;
+        if (!$profile) {
+            Log::error("Profile not found for user ID: {$request->user_id}");
+            abort(404, 'Profile not found');
+        }
+        return response()->json([
+            'id' => $profile->id,
+            'about' => $profile->about,
+            'instagram' => $profile->instagram,
+            'twitter' => $profile->twitter,
+            'youtube' => $profile->youtube,
+            'avatar' => $profile->avatar,
+            'name' => $user->name,
         ]);
     }
 
