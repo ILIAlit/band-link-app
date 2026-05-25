@@ -4,8 +4,18 @@ import type { Release } from '@/types';
 export default function UserReleaseState({
     myReleases,
 }: {
-    myReleases: Release[];
+    myReleases: Release[] | undefined;
 }) {
+    if (!myReleases?.length) {
+        return (
+            <div className="py-20 text-center">
+                <h2 className="text-2xl font-bold text-zinc-400">
+                    Release not found
+                </h2>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6">
             <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">

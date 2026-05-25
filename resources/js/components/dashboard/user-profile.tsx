@@ -20,9 +20,11 @@ import type { User, Profile } from '@/types';
 export default function UserProfile({
     user,
     profile,
+    releaseCount,
 }: {
     user: User;
     profile?: Profile;
+    releaseCount: number | undefined;
 }) {
     const [inputAbout, setInputAbout] = useState(profile?.about || '');
     const [inputInstagram, setInputInstagram] = useState(
@@ -46,7 +48,9 @@ export default function UserProfile({
                         <h1 className="mb-2 text-4xl font-bold text-white">
                             {user.name}
                         </h1>
-                        <p className="text-zinc-300">{'2'} releases</p>
+                        <p className="text-zinc-300">
+                            {releaseCount ?? 0} releases
+                        </p>
                     </div>
                 </div>
             </div>

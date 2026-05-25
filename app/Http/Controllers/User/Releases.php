@@ -31,7 +31,6 @@ class Releases extends Controller
         try {
             $release = Release::with([
                 'user:id,name',
-                'user.profile: about, instagram, twitter, youtube, avatar',
             ])->find($request->id);
 
             if (! $release) {
@@ -39,19 +38,21 @@ class Releases extends Controller
             }
 
             $author = $release->user;
+            $user = User::find($author->id);
+            $profile = $user->profile;
 
-            Log::info($release);
+
 
             $authorData = null;
             if ($author) {
                 $authorData = [
                     'id' => $author->id,
                     'name' => $author->name,
-                    'about' => $author->profile->about ?? null,
-                    'instagram' => $author->profile->instagram ?? null,
-                    'twitter' => $author->profile->twitter ?? null,
-                    'youtube' => $author->profile->youtube ?? null,
-                    'avatar' => $author->profile->avatar ?? null,
+                    'about' => $profile->about ?? null,
+                    'instagram' => $profile->instagram ?? null,
+                    'twitter' => $profile->twitter ?? null,
+                    'youtube' => $profile->youtube ?? null,
+                    'avatar' => $profile->avatar ?? null,
                 ];
             }
 

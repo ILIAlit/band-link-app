@@ -9,7 +9,18 @@ export interface Release {
     sound_cloud_url?: string;
     spotify_url?: string;
     youtube_music_url?: string;
-    user: Pick<
+}
+
+export interface AuthorRelease {
+    id: string;
+    title: string;
+    cover_image: string;
+    release_date: string;
+    apple_music_url?: string;
+    sound_cloud_url?: string;
+    spotify_url?: string;
+    youtube_music_url?: string;
+    user?: Pick<
         User,
         'id' | 'name' | 'avatar' | 'about' | 'instagram' | 'twitter' | 'youtube'
     >;

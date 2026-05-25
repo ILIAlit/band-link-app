@@ -1,8 +1,8 @@
 import { Head, usePage } from '@inertiajs/react';
 import { Form } from '@inertiajs/react';
 import UserProfile from '@/components/dashboard/user-profile';
-// import UserReleaseList from '@/components/dashboard/user-release-list';
-// import UserReleaseState from '@/components/dashboard/user-release-state';
+import UserReleaseList from '@/components/dashboard/user-release-list';
+import UserReleaseState from '@/components/dashboard/user-release-state';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,16 +18,19 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 
 import release from '@/routes/release';
-import type { Profile, Auth } from '@/types';
+import type { Profile, Auth, Release } from '@/types';
 
 export default function Dashboard() {
     const page = usePage<{
         auth: Auth;
         profile?: Profile;
+        releases?: Release[];
     }>();
 
-    const { auth, profile } = page.props;
+    const { auth, profile, releases } = page.props;
     const user = auth.user;
+
+    console.log(page);
 
     return (
         <>
@@ -222,10 +225,14 @@ export default function Dashboard() {
                     </div>
                 </div>
                 <div className="mb-8 grid gap-6 lg:grid-cols-3">
-                    {/* <UserReleaseList myReleases={myReleases} />
-                    <UserReleaseState myReleases={myReleases} /> */}
+                    <UserReleaseList myReleases={releases} />
+                    <UserReleaseState myReleases={releases} />
                 </div>
-                <UserProfile user={user} profile={profile} />
+                <UserProfile
+                    user={user}
+                    profile={profile}
+                    releaseCount={releases?.length}
+                />
             </div>
         </>
     );

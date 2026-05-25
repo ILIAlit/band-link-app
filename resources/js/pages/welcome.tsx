@@ -3,12 +3,12 @@ import { Calendar } from 'lucide-react';
 import { useMemo, useState } from 'react';
 //import { mockReleases } from '@/data/mockData';
 import release from '@/routes/release';
-import type { Release, Auth } from '@/types';
+import type { Auth, AuthorRelease } from '@/types';
 
 export default function Welcome() {
     const page = usePage<{
         auth: Auth;
-        releases: Release[];
+        releases: AuthorRelease[];
     }>();
     const { releases } = page.props;
 

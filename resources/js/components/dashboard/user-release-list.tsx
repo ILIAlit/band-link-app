@@ -1,14 +1,24 @@
 import { Link } from '@inertiajs/react';
 import { Eye, BarChart3 } from 'lucide-react';
 import { useState } from 'react';
+import release from '@/routes/release';
 import type { Release } from '@/types';
+import ShareButton from '../share-button';
 
 export default function UserReleaseList({
     myReleases,
 }: {
-    myReleases: Release[];
+    myReleases: Release[] | undefined;
 }) {
     const [timeRange, setTimeRange] = useState<'7d' | '30d' | 'all'>('30d');
+
+    if (!myReleases?.length) {
+        <div className="py-20 text-center">
+            <h2 className="text-2xl font-bold text-zinc-400">
+                Release not found
+            </h2>
+        </div>;
+    }
 
     return (
         <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 lg:col-span-2">
@@ -31,31 +41,38 @@ export default function UserReleaseList({
             </div>
 
             <div className="space-y-4">
-                {myReleases.map((release) => (
+                {myReleases?.map((releaseItem) => (
                     <div
-                        key={release.id}
+                        key={releaseItem.id}
                         className="flex items-center gap-4 rounded-lg bg-zinc-800/50 p-4 transition-colors hover:bg-zinc-800"
                     >
                         <img
-                            src={release.coverUrl}
-                            alt={release.title}
+                            src={releaseItem.cover_image}
+                            alt={releaseItem.title}
                             className="h-16 w-16 rounded-lg object-cover"
                         />
                         <div className="min-w-0 flex-1">
                             <h3 className="mb-1 truncate font-semibold">
-                                {release.title}
+                                {releaseItem.title}
                             </h3>
                             <p className="text-sm text-zinc-500">
                                 {new Date(
-                                    release.releaseDate,
+                                    releaseItem.release_date,
                                 ).toLocaleDateString('ru-RU')}
                             </p>
                         </div>
+
                         <div className="flex items-center gap-6 text-sm">
-                            <div className="text-center">
-                                <p className="font-bold text-pink-400">Share</p>
-                            </div>
-                            <Link className="rounded-lg bg-zinc-700 p-2 transition-colors hover:bg-zinc-600">
+                            <ShareButton
+                                urlRelease={new URL(
+                                    release.getone(releaseItem.id).url,
+                                    window.location.origin,
+                                ).toString()}
+                            />
+                            <Link
+                                href={release.getone(releaseItem.id)}
+                                className="rounded-lg bg-zinc-700 p-2 transition-colors hover:bg-zinc-600"
+                            >
                                 <Eye className="h-4 w-4" />
                             </Link>
                         </div>

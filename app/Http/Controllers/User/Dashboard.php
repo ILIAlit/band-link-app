@@ -29,6 +29,8 @@ class Dashboard extends Controller
             Log::error("Profile not found for user ID: $userId");
             return Inertia::render('dashboard');
         }
+        $userReleases = $user->releases;
+
         return Inertia::render('dashboard', [
             'profile' => [
                 'id' => $userProfile->id,
@@ -38,6 +40,7 @@ class Dashboard extends Controller
                 'youtube' => $userProfile->youtube,
                 'avatar' => $userProfile->avatar,
             ],
+            'releases' => $userReleases,
         ]);
     }
 

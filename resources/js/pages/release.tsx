@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { Calendar, Music } from 'lucide-react';
 import SoundLinkList from '@/components/release/sound-link-lict';
 import UserAbout from '@/components/release/user-about';
@@ -11,7 +11,16 @@ export default function Release() {
     const page = usePage<{
         auth: Auth;
         release: Release;
-        author: Pick<User, 'id' | 'name' | 'avatar'| 'about' | 'instagram' | 'twitter' | 'youtube'>;
+        author: Pick<
+            User,
+            | 'id'
+            | 'name'
+            | 'avatar'
+            | 'about'
+            | 'instagram'
+            | 'twitter'
+            | 'youtube'
+        >;
     }>();
     const { release, author } = page.props;
 
@@ -71,40 +80,6 @@ export default function Release() {
                 </div>
             </div>
 
-            <div className="rounded-2xl bg-zinc-900 p-8">
-                <h2 className="mb-6 text-2xl font-bold">About the Artist</h2>
-                <div className="flex items-start gap-6">
-                    <img
-                        src={'#'}
-                        alt={'#'}
-                        className="h-24 w-24 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                        <h3 className="mb-2 text-xl font-bold">{'#'}</h3>
-                        <p className="mb-4 text-zinc-400">{'#'}</p>
-
-                        <div className="flex gap-3">
-                            <a
-                                key={1}
-                                href={'#'}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-2 text-sm transition-colors hover:bg-zinc-700"
-                            >
-                                <span>{'#'}</span>
-                                <span>Instagram</span>
-                            </a>
-
-                            <Link
-                                href={`#`}
-                                className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm transition-colors hover:bg-purple-700"
-                            >
-                                View All Releases
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <UserAbout author={author} />
         </div>
     );
