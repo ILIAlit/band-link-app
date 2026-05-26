@@ -4,102 +4,51 @@ namespace App\Http\Controllers\User;
 
 use Inertia\Inertia;
 use App\Models\User;
-use App\Models\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Actions\Fortify\ImageUploader;
+use App\Actions\Profile\GetUserProfileAction;
+use App\Actions\Profile\UpdateUserProfileAction;
+use App\Http\Requests\UpdateProfileRequest;
 
 class Dashboard extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, GetUserProfileAction $getProfileAction)
     {
         $userId = Auth::user()->id;
-        $user = User::find($userId);
-        if (!$user) {
-            Log::error("User not found with ID: $userId");
-            abort(404, 'User not found');
-        }
-        $userProfile = $user->profile;
-        if (!$userProfile) {
-            Log::error("Profile not found for user ID: $userId");
-            return Inertia::render('dashboard');
-        }
-        $userReleases = $user->releases;
+        $profile = $getProfileAction->execute($userId);
+
+        $userReleases = Auth::user()->releases;
 
         return Inertia::render('dashboard', [
-            'profile' => [
-                'id' => $userProfile->id,
-                'about' => $userProfile->about,
-                'instagram' => $userProfile->instagram,
-                'twitter' => $userProfile->twitter,
-                'youtube' => $userProfile->youtube,
-                'avatar' => $userProfile->avatar,
-            ],
+            'profile' => $profile,
             'releases' => $userReleases,
         ]);
     }
 
-    public function getUserProfile(Request $request)
+    public function getUserProfile(Request $request, GetUserProfileAction $action)
     {
-        $user = User::find($request->user_id);
-        if (!$user) {
-            Log::error("User not found with ID: {$request->user_id}");
-            abort(404, 'User not found');
-        }
-        $profile = $user->profile;
-        if (!$profile) {
-            Log::error("Profile not found for user ID: {$request->user_id}");
-            abort(404, 'Profile not found');
-        }
-        return response()->json([
-            'id' => $profile->id,
-            'about' => $profile->about,
-            'instagram' => $profile->instagram,
-            'twitter' => $profile->twitter,
-            'youtube' => $profile->youtube,
-            'avatar' => $profile->avatar,
-            'name' => $user->name,
-        ]);
+        $profile = $action->execute($request->user_id);
+        return response()->json(['profile' => $profile]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateProfileRequest $request, UpdateUserProfileAction $action)
     {
+        $user = Auth::user();
 
-
-        $request->validate([
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-        ]);
-
-        $imgPath = $request->avatarSrc;
-
-        if ($request->avatar) {
-            $imgPath = app(ImageUploader::class)->upload($request->avatar);
-        }
-
-
-
-        $userId = Auth::user()->id;
-        $user = User::find($userId);
-        if (!$user) {
-            Log::error("User not found with ID: $userId");
-            abort(404, 'User not found');
-        }
-        $userProfile = $user->profile;
-        if (!$userProfile) {
-            Log::error("Profile not found for user ID: $userId");
-        }
-        $userProfile->update([
+        $action->execute($user, [
             'about' => $request->about,
             'instagram' => $request->instagram,
             'twitter' => $request->twitter,
             'youtube' => $request->youtube,
-            'avatar' => $imgPath,
+            'avatar' => $request->file('avatar'),
+            'avatarSrc' => $request->avatarSrc,
         ]);
+
         return redirect()->route('dashboard');
     }
 }

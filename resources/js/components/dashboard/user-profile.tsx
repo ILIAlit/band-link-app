@@ -1,3 +1,4 @@
+import { useHttp } from '@inertiajs/react';
 import { Form } from '@inertiajs/react';
 import { ExternalLink } from 'lucide-react';
 import { useState } from 'react';
@@ -15,23 +16,40 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import dashboard from '@/routes/dashboard';
+import profile from '@/routes/profile';
 import type { User, Profile } from '@/types';
 
 export default function UserProfile({
     user,
-    profile,
+    profile: profileData,
     releaseCount,
 }: {
     user: User;
     profile?: Profile;
     releaseCount: number | undefined;
 }) {
-    const [inputAbout, setInputAbout] = useState(profile?.about || '');
+    const [inputAbout, setInputAbout] = useState(profileData?.about || '');
     const [inputInstagram, setInputInstagram] = useState(
-        profile?.instagram || '',
+        profileData?.instagram || '',
     );
-    const [inputTwitter, setInputTwitter] = useState(profile?.twitter || '');
-    const [inputYoutube, setInputYoutube] = useState(profile?.youtube || '');
+    const [inputTwitter, setInputTwitter] = useState(
+        profileData?.twitter || '',
+    );
+    const [inputYoutube, setInputYoutube] = useState(
+        profileData?.youtube || '',
+    );
+
+    const { get } = useHttp();
+
+    function search() {
+        get(profile.get(3).url, {
+            onSuccess: (response) => {
+                console.log('Profile data:', response);
+            },
+        });
+    }
+
+    search();
 
     return (
         <div className="md-8">
@@ -39,7 +57,7 @@ export default function UserProfile({
                 <div className="h-48 rounded-2xl bg-gradient-to-r from-purple-900 to-pink-900"></div>
                 <div className="absolute -bottom-16 left-8 flex items-end gap-6">
                     <img
-                        src={profile?.avatar}
+                        src={profileData?.avatar}
                         alt={`${user.name}'s avatar`}
                         className="h-32 w-32 rounded-full border-4 border-zinc-950 object-cover shadow-xl"
                     />
@@ -60,7 +78,7 @@ export default function UserProfile({
                     <div className="rounded-xl bg-zinc-900 p-6">
                         <h2 className="mb-3 text-xl font-bold">About</h2>
                         <p className="text-zinc-400">
-                            {profile?.about || 'No information available.'}
+                            {profileData?.about || 'No information available.'}
                         </p>
                     </div>
 
@@ -69,7 +87,7 @@ export default function UserProfile({
                         <div className="flex flex-wrap gap-3">
                             <a
                                 key={'instagram'}
-                                href={profile?.instagram || '#'}
+                                href={profileData?.instagram || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-3 transition-colors hover:bg-zinc-700"
@@ -80,7 +98,7 @@ export default function UserProfile({
                             </a>
                             <a
                                 key={'twitter'}
-                                href={profile?.twitter || '#'}
+                                href={profileData?.twitter || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-3 transition-colors hover:bg-zinc-700"
@@ -91,7 +109,7 @@ export default function UserProfile({
                             </a>
                             <a
                                 key={'youtube'}
-                                href={profile?.youtube || '#'}
+                                href={profileData?.youtube || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 rounded-lg bg-zinc-800 px-4 py-3 transition-colors hover:bg-zinc-700"
@@ -153,7 +171,8 @@ export default function UserProfile({
                                                     name="avatarSrc"
                                                     placeholder="avatar URL"
                                                     value={
-                                                        profile?.avatar || ''
+                                                        profileData?.avatar ||
+                                                        ''
                                                     }
                                                 />
                                                 <InputError

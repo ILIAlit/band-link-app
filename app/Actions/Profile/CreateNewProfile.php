@@ -12,14 +12,17 @@ use App\Models\User;
 class CreateNewProfile
 {
 
+    public function __construct(private Profile $profile) {}
+
     /**
-     * Validate and create a newly profile for registered user.
+     * @param User $user
+     * @return Profile
      *
      * 
      */
     public function create(User $user): Profile
     {
-        $profile = new Profile();
+        $profile = $this->profile;
         $user->profile()->save($profile);
         return $profile;
     }
