@@ -11,14 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Actions\Fortify\ImageUploader;
+use App\Http\Requests\CreateReleaseRequest;
+use App\Actions\Release\CreateRelease;
 
 class Releases extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function __invoke(Request $request) {}
-
     public function get()
     {
         return Inertia::render('welcome', [
@@ -66,36 +63,20 @@ class Releases extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function create(CreateReleaseRequest $request, CreateRelease $createRelease)
     {
-        $request->validate([
-            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-        ]);
-
         $userId = Auth::user()->id;
 
-        $user = User::find($userId);
-        if (!$user) {
-            Log::error("User not found with ID: $userId");
-            abort(404, 'User not found');
-        }
-        $imgPath = $request->coverSrc;
-
-        if ($request->cover) {
-            $imgPath = app(ImageUploader::class)->upload($request->cover);
-        }
-        $release = Release::create([
+        $createRelease->execute($userId, [
             'title' => $request->title,
             'spotify_url' => $request->spotify_url,
             'apple_music_url' => $request->apple_music_url,
             'youtube_music_url' => $request->youtube_music_url,
             'sound_cloud_url' => $request->sound_cloud_url,
-            'release_date' => new DateTime(),
-            'cover_image' => $imgPath,
-
+            //'release_date' => new DateTime(),
+            'cover' => $request->cover,
+            'coverSrc' => $request->coverSrc,
         ]);
-
-        $user->releases()->save($release);
 
         return redirect()->route('dashboard');
     }

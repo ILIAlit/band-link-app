@@ -4,13 +4,15 @@ namespace App\Actions\Profile;
 
 use App\Models\User;
 use App\Models\Profile;
-use App\Actions\Fortify\ImageUploader;
+use App\Actions\Utils\ImageUploader;
 use Illuminate\Support\Facades\Log;
+use App\Service\ProfileService;
 
 class UpdateUserProfileAction
 {
     public function __construct(
-        private ImageUploader $imageUploader
+        private ImageUploader $imageUploader,
+        private ProfileService $profileService,
     ) {}
 
     /**
@@ -21,22 +23,10 @@ class UpdateUserProfileAction
      */
     public function execute(User $user, array $data): Profile
     {
-        $profile = $this->getProfile($user);
+        $profile = $this->profileService->findProfile($user);
         $imagePath = $this->handleImageUpload($data);
 
         return $this->updateProfile($profile, $data, $imagePath);
-    }
-
-    private function getProfile(User $user): Profile
-    {
-        $profile = $user->profile;
-
-        if (!$profile) {
-            Log::error("Profile not found for user ID: {$user->id}");
-            abort(404, 'Profile not found');
-        }
-
-        return $profile;
     }
 
     private function handleImageUpload(array $data): ?string

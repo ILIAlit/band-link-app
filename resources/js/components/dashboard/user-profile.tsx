@@ -1,4 +1,4 @@
-import { useHttp } from '@inertiajs/react';
+//import { useHttp } from '@inertiajs/react';
 import { Form } from '@inertiajs/react';
 import { ExternalLink } from 'lucide-react';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import dashboard from '@/routes/dashboard';
-import profile from '@/routes/profile';
+//import profile from '@/routes/profile';
 import type { User, Profile } from '@/types';
 
 export default function UserProfile({
@@ -39,17 +39,17 @@ export default function UserProfile({
         profileData?.youtube || '',
     );
 
-    const { get } = useHttp();
+    //const { get } = useHttp();
 
-    function search() {
-        get(profile.get(3).url, {
-            onSuccess: (response) => {
-                console.log('Profile data:', response);
-            },
-        });
-    }
+    // function search() {
+    //     get(profile.get(3).url, {
+    //         onSuccess: (response) => {
+    //             console.log('Profile data:', response);
+    //         },
+    //     });
+    // }
 
-    search();
+    // search();
 
     return (
         <div className="md-8">

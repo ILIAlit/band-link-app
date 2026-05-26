@@ -14,9 +14,7 @@ use App\Http\Requests\UpdateProfileRequest;
 
 class Dashboard extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
+
     public function __invoke(Request $request, GetUserProfileAction $getProfileAction)
     {
         $userId = Auth::user()->id;

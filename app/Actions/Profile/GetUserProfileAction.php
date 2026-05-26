@@ -4,9 +4,12 @@ namespace App\Actions\Profile;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use App\Service\UserService;
 
 class GetUserProfileAction
 {
+
+    public function __construct(private UserService $userService) {}
     /**
      *
      * @param int $userId
@@ -15,22 +18,10 @@ class GetUserProfileAction
      */
     public function execute(int $userId): array
     {
-        $user = $this->findUser($userId);
+        $user = $this->userService->findUser($userId);
         $profile = $this->findProfile($user);
 
         return $this->formatProfile($profile, $user);
-    }
-
-    private function findUser(int $userId): User
-    {
-        $user = User::find($userId);
-
-        if (!$user) {
-            Log::error("User not found with ID: {$userId}");
-            abort(404, 'User not found');
-        }
-
-        return $user;
     }
 
     private function findProfile(User $user): \App\Models\Profile
