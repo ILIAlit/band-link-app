@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\Logout;
 
 use App\Http\Controllers\User\Releases;
 
+//Route::inertia('/', 'welcome')->name('home');
 Route::get('/', [Releases::class, 'get'])->name('home');
 
 Route::post('/logout', Logout::class)
