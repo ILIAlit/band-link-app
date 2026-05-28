@@ -12,7 +12,6 @@ export default function Welcome() {
     }>();
     const { releases } = page.props;
 
-    console.log(releases);
     const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
     const sortedReleases = useMemo(() => {
         return [...releases].sort((a, b) => {
