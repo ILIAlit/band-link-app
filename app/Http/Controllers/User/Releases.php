@@ -13,13 +13,17 @@ use Inertia\Inertia;
 use App\Actions\Fortify\ImageUploader;
 use App\Http\Requests\CreateReleaseRequest;
 use App\Actions\Release\CreateRelease;
+use App\Actions\Release\DeleteRelease;
+
 
 class Releases extends Controller
 {
     public function get()
     {
         return Inertia::render('welcome', [
-            'releases' => Release::with('user:id,name')->get(),
+            'releases' => Inertia::scroll(function () {
+                return Release::paginate();
+            }),
         ]);
     }
 
@@ -78,6 +82,13 @@ class Releases extends Controller
             'coverSrc' => $request->coverSrc,
         ]);
 
+        return redirect()->route('dashboard');
+    }
+
+    public function delete(Request $request, DeleteRelease $deleteRelease)
+    {
+        $userId = Auth::user()->id;
+        $deleteRelease->execute($request->id, $userId);
         return redirect()->route('dashboard');
     }
 }

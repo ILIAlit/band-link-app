@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 
 
 class UserService
@@ -19,7 +18,6 @@ class UserService
     {
         $user = User::find($userId);
         if (!$user) {
-            Log::error("User not found with ID: {$userId}");
             abort(404, 'User not found');
         }
         return $user;

@@ -1,7 +1,7 @@
 import type { User } from './auth';
 
 export interface Release {
-    id: string;
+    id: number;
     title: string;
     cover_image: string;
     release_date: string;
@@ -24,6 +24,10 @@ export interface AuthorRelease {
         User,
         'id' | 'name' | 'avatar' | 'about' | 'instagram' | 'twitter' | 'youtube'
     >;
+}
+
+export interface PaginateAuthorRelease {
+    data: AuthorRelease[];
 }
 
 export interface StreamingLink {

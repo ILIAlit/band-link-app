@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { Eye, BarChart3 } from 'lucide-react';
+import { Eye, BarChart3, Delete } from 'lucide-react';
 import { useState } from 'react';
 import release from '@/routes/release';
 import type { Release } from '@/types';
@@ -11,6 +11,14 @@ export default function UserReleaseList({
     myReleases: Release[] | undefined;
 }) {
     const [timeRange, setTimeRange] = useState<'7d' | '30d' | 'all'>('30d');
+    const [deleteButtonHide, setDeleteButtonHide] = useState(false);
+
+    function hideDeleteButton() {
+        setDeleteButtonHide(true);
+        setTimeout(() => {
+            setDeleteButtonHide(false);
+        }, 2000);
+    }
 
     if (!myReleases?.length) {
         <div className="py-20 text-center">
@@ -63,6 +71,13 @@ export default function UserReleaseList({
                         </div>
 
                         <div className="flex items-center gap-6 text-sm">
+                            <Link
+                                hidden={deleteButtonHide}
+                                onClick={hideDeleteButton}
+                                href={release.delete(releaseItem.id)}
+                            >
+                                <Delete />
+                            </Link>
                             <ShareButton
                                 urlRelease={new URL(
                                     release.getone(releaseItem.id).url,

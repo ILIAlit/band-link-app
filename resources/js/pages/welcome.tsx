@@ -1,27 +1,29 @@
+import { InfiniteScroll } from '@inertiajs/react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Calendar } from 'lucide-react';
-import { useMemo, useState } from 'react';
-//import { mockReleases } from '@/data/mockData';
+import { useState } from 'react';
 import release from '@/routes/release';
-import type { Auth, AuthorRelease } from '@/types';
+import type { Auth, PaginateAuthorRelease } from '@/types';
 
 export default function Welcome() {
     const page = usePage<{
         auth: Auth;
-        releases: AuthorRelease[];
+        releases: PaginateAuthorRelease;
     }>();
     const { releases } = page.props;
+    //const { data: releaseData } = releases;
 
-    console.log(releases);
+    console.log(page);
+
     const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
-    const sortedReleases = useMemo(() => {
-        return [...releases].sort((a, b) => {
-            const dateA = new Date(a.release_date).getTime();
-            const dateB = new Date(b.release_date).getTime();
+    // const sortedReleases = useMemo(() => {
+    //     return [...releaseData].sort((a, b) => {
+    //         const dateA = new Date(a.release_date).getTime();
+    //         const dateB = new Date(b.release_date).getTime();
 
-            return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-        });
-    }, [sortOrder]);
+    //         return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    //     });
+    // }, [sortOrder]);
 
     return (
         <>
@@ -55,48 +57,46 @@ export default function Welcome() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-4">
-                    {sortedReleases.map((releaseItem) => (
-                        <Link
-                            href={release.getone(releaseItem.id)}
-                            key={releaseItem.id}
-                            className="group overflow-hidden rounded-xl bg-zinc-900 transition-all duration-300 hover:scale-105 hover:bg-zinc-800 hover:shadow-xl hover:shadow-purple-900/20"
-                        >
-                            <div className="aspect-square overflow-hidden">
-                                <img
-                                    src={releaseItem.cover_image}
-                                    alt={releaseItem.title}
-                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                />
-                            </div>
-
-                            <div className="p-4">
-                                <h3 className="mb-1 text-lg font-bold transition-colors group-hover:text-purple-400">
-                                    {releaseItem.title}
-                                </h3>
-                                <p className="mb-3 text-sm text-zinc-400">
-                                    {releaseItem.user?.name}
-                                </p>
-
-                                <div className="flex items-center justify-between text-xs text-zinc-500">
-                                    <span>
-                                        {new Date(
-                                            releaseItem.release_date,
-                                        ).toLocaleDateString('ru-RU')}
-                                    </span>
-                                    {/* {release.stats && (
-                                        <span className="flex items-center gap-1">
-                                            <TrendingUp className="h-3 w-3" />
-                                            {(
-                                                release.stats.streams / 1000
-                                            ).toFixed(0)}
-                                            K
-                                        </span>
-                                    )} */}
+                <div>
+                    <InfiniteScroll
+                        buffer={500}
+                        loading={() => 'Loading more users...'}
+                        data="releases"
+                        className="grid grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-4"
+                    >
+                        {releases.data.map((releaseItem) => (
+                            <Link
+                                href={release.getone(releaseItem.id)}
+                                key={releaseItem.id}
+                                className="group overflow-hidden rounded-xl bg-zinc-900 transition-all duration-300 hover:scale-105 hover:bg-zinc-800 hover:shadow-xl hover:shadow-purple-900/20"
+                            >
+                                <div className="aspect-square overflow-hidden">
+                                    <img
+                                        src={releaseItem.cover_image}
+                                        alt={releaseItem.title}
+                                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                    />
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
+
+                                <div className="p-4">
+                                    <h3 className="mb-1 text-lg font-bold transition-colors group-hover:text-purple-400">
+                                        {releaseItem.title}
+                                    </h3>
+                                    <p className="mb-3 text-sm text-zinc-400">
+                                        {releaseItem.user?.name}
+                                    </p>
+
+                                    <div className="flex items-center justify-between text-xs text-zinc-500">
+                                        <span>
+                                            {new Date(
+                                                releaseItem.release_date,
+                                            ).toLocaleDateString('ru-RU')}
+                                        </span>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </InfiniteScroll>
                 </div>
             </div>
         </>

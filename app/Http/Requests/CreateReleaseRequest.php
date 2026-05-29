@@ -15,7 +15,8 @@ class CreateReleaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'cover' => 'image|mimes:jpeg,png,jpg,gif',
+            'title' => 'required'
         ];
     }
 }

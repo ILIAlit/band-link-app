@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Models\User;
 use App\Models\Profile;
-use Illuminate\Support\Facades\Log;
 
 class ProfileService
 {
@@ -21,7 +20,6 @@ class ProfileService
         $profile = $user->profile;
 
         if (!$profile) {
-            Log::error("Profile not found for user ID: {$user->id}");
             abort(404, 'Profile not found');
         }
 
