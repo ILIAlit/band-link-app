@@ -17,7 +17,7 @@ export default function Dashboard() {
         <>
             <Head title="Dashboard" />
             <div className="mx-auto max-w-7xl">
-                <div className="mb-8 flex">
+                <div className="mb-8 flex justify-between">
                     <div>
                         <h1 className="mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-4xl font-bold text-transparent">
                             Dashboard
@@ -28,6 +28,7 @@ export default function Dashboard() {
                     </div>
                     <CreateReleaseDialog />
                 </div>
+
                 <div className="mb-8 grid gap-6 lg:grid-cols-3">
                     <UserReleaseList myReleases={releases} />
                     <UserReleaseState myReleases={releases} />

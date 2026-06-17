@@ -75,6 +75,7 @@ export default function Release() {
                             sound_cloud_url={release.sound_cloud_url}
                             spotify_url={release.spotify_url}
                             youtube_music_url={release.youtube_music_url}
+                            releaseId={release.id}
                         />
                     </div>
                 </div>

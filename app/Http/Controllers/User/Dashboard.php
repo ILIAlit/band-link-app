@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use Inertia\Inertia;
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\Profile\GetUserProfileAction;
 use App\Actions\Profile\UpdateUserProfileAction;
@@ -37,15 +35,11 @@ class Dashboard extends Controller
     public function update(UpdateProfileRequest $request, UpdateUserProfileAction $action)
     {
         $user = Auth::user();
+        $validated = $request->validated();
 
-        $action->execute($user, [
-            'about' => $request->about,
-            'instagram' => $request->instagram,
-            'twitter' => $request->twitter,
-            'youtube' => $request->youtube,
-            'avatar' => $request->file('avatar'),
-            'avatarSrc' => $request->avatarSrc,
-        ]);
+        $action->execute($user, $validated);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Профиль обновлён.')]);
 
         return redirect()->route('dashboard');
     }

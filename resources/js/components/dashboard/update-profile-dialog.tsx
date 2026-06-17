@@ -69,6 +69,10 @@ export default function UpdateProfileDialog({
                                                 name="avatar"
                                                 placeholder="avatar"
                                             />
+                                            <InputError
+                                                className="mt-2"
+                                                message={errors.avatar}
+                                            />
                                             <Input
                                                 id="avatarSrc"
                                                 type="text"
@@ -183,15 +187,11 @@ export default function UpdateProfileDialog({
                                             <DialogClose>
                                                 <a className="mr-4">Cancel</a>
                                             </DialogClose>
-                                            <DialogClose>
-                                                <Button
-                                                    type="submit"
-                                                    tabIndex={5}
-                                                >
-                                                    {processing && <Spinner />}
-                                                    Save
-                                                </Button>
-                                            </DialogClose>
+
+                                            <Button type="submit" tabIndex={5}>
+                                                {processing && <Spinner />}
+                                                Save
+                                            </Button>
                                         </div>
                                     </div>
                                 </>

@@ -13,6 +13,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use App\Models\StatUrl;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -44,4 +46,9 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->hasMany(Release::class);
     }
+
+    public function stats(): HasManyThrough
+{
+    return $this->hasManyThrough(StatUrl::class, Release::class);
+}
 }

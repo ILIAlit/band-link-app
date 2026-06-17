@@ -2,8 +2,14 @@ import { Link, usePage } from '@inertiajs/react';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { LayoutDashboard } from 'lucide-react';
 import AppLogoIcon from '@/components/app-logo-icon';
+import {
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { dashboard, home, login, logout } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
+import { Button } from '@/components/ui/button';
 
 export default function AppLayout({
     children,
@@ -43,25 +49,33 @@ export default function AppLayout({
                                 >
                                     Releases
                                 </Link>
+
                                 {auth.user ? (
                                     <DropdownMenu>
-                                        <Link
-                                            href={dashboard()}
-                                            className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-colors ${
-                                                isDashboard
-                                                    ? 'bg-purple-600 text-white'
-                                                    : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-                                            }`}
-                                        >
-                                            <LayoutDashboard className="h-4 w-4" />
-                                            Dashboard
-                                        </Link>
-                                        <Link
-                                            href={logout()}
-                                            className="flex items-center gap-2 rounded-lg px-4 py-2 text-zinc-300 hover:bg-zinc-700"
-                                        >
-                                            Logout
-                                        </Link>
+                                        <DropdownMenuTrigger>
+                                            <Button className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-white transition-colors">
+                                                Menu
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="gap-3 bg-zinc-950 p-3">
+                                            <Link
+                                                href={dashboard()}
+                                                className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-colors ${
+                                                    isDashboard
+                                                        ? 'bg-purple-600 text-white'
+                                                        : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                                                }`}
+                                            >
+                                                <LayoutDashboard className="h-4 w-4" />
+                                                Dashboard
+                                            </Link>
+                                            <Link
+                                                href={logout()}
+                                                className="flex items-center gap-2 rounded-lg px-4 py-2 text-zinc-300 hover:text-zinc-400"
+                                            >
+                                                Logout
+                                            </Link>
+                                        </DropdownMenuContent>
                                     </DropdownMenu>
                                 ) : (
                                     <Link

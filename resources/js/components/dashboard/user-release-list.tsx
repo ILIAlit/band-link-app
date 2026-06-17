@@ -10,7 +10,6 @@ export default function UserReleaseList({
 }: {
     myReleases: Release[] | undefined;
 }) {
-    const [timeRange, setTimeRange] = useState<'7d' | '30d' | 'all'>('30d');
     const [deleteButtonHide, setDeleteButtonHide] = useState(false);
 
     function hideDeleteButton() {
@@ -35,17 +34,6 @@ export default function UserReleaseList({
                     <BarChart3 className="h-5 w-5 text-purple-400" />
                     Performance Overview
                 </h2>
-                <select
-                    value={timeRange}
-                    onChange={(e) =>
-                        setTimeRange(e.target.value as '7d' | '30d' | 'all')
-                    }
-                    className="rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-sm text-zinc-200 focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                >
-                    <option value="7d">Last 7 days</option>
-                    <option value="30d">Last 30 days</option>
-                    <option value="all">All time</option>
-                </select>
             </div>
 
             <div className="space-y-4">

@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use DateTime;
 use Illuminate\Http\Request;
 use App\Models\Release;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Inertia\Inertia;
-use App\Actions\Fortify\ImageUploader;
 use App\Http\Requests\CreateReleaseRequest;
 use App\Actions\Release\CreateRelease;
 use App\Actions\Release\DeleteRelease;
+use App\Actions\Release\GetOneRelease;
 
 
 class Releases extends Controller
@@ -22,66 +20,40 @@ class Releases extends Controller
     {
         return Inertia::render('welcome', [
             'releases' => Inertia::scroll(function () {
-                return Release::paginate();
+                return Release::query()
+                ->orderBy('created_at', 'asc')
+                ->paginate();
             }),
         ]);
     }
 
-    public function getOne(Request $request)
+    public function getOne(Request $request, GetOneRelease $getOneRelease)
     {
-        try {
-            $release = Release::with([
-                'user:id,name',
-            ])->find($request->id);
-
-            if (! $release) {
-                return redirect()->route('welcome');
-            }
-
-            $author = $release->user;
-            $user = User::find($author->id);
-            $profile = $user->profile;
-
-
-
-            $authorData = null;
-            if ($author) {
-                $authorData = [
-                    'id' => $author->id,
-                    'name' => $author->name,
-                    'about' => $profile->about ?? null,
-                    'instagram' => $profile->instagram ?? null,
-                    'twitter' => $profile->twitter ?? null,
-                    'youtube' => $profile->youtube ?? null,
-                    'avatar' => $profile->avatar ?? null,
-                ];
-            }
-
-            return Inertia::render('release', [
-                'release' => $release,
-                'author' => $authorData,
-            ]);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return redirect()->back()->with('error', $e->getMessage());
-        }
+        $release = $getOneRelease->execute($request->id);
+    
+        $author = $release->user;
+        $profile = $author?->profile;
+    
+        return Inertia::render('release', [
+            'release' => $release,
+            'author' => $author ? [
+                'id' => $author->id,
+                'name' => $author->name,
+                'about' => $profile?->about,
+                'instagram' => $profile?->instagram,
+                'twitter' => $profile?->twitter,
+                'youtube' => $profile?->youtube,
+                'avatar' => $profile?->avatar,
+            ] : null,
+        ]);
     }
 
     public function create(CreateReleaseRequest $request, CreateRelease $createRelease)
     {
+        $validated = $request->validated();
+        
         $userId = Auth::user()->id;
-
-        $createRelease->execute($userId, [
-            'title' => $request->title,
-            'spotify_url' => $request->spotify_url,
-            'apple_music_url' => $request->apple_music_url,
-            'youtube_music_url' => $request->youtube_music_url,
-            'sound_cloud_url' => $request->sound_cloud_url,
-            //'release_date' => new DateTime(),
-            'cover' => $request->cover,
-            'coverSrc' => $request->coverSrc,
-        ]);
-
+        $createRelease->execute($userId, $validated);
         return redirect()->route('dashboard');
     }
 

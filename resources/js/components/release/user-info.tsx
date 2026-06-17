@@ -11,15 +11,18 @@ export default function UserInfo({
 }) {
     return (
         <>
-            <Link
-                href={`/artist/${id}`}
-                className="group mb-4 inline-flex items-center gap-3"
-            >
-                <img
-                    src={avatar}
-                    alt={name}
-                    className="h-12 w-12 rounded-full object-cover"
-                />
+            <Link className="group mb-4 inline-flex items-center gap-3">
+                {avatar ? (
+                    <img
+                        src={avatar}
+                        alt={`${name}'s avatar`}
+                        className="h-15 w-15 rounded-full border-4 border-zinc-950 object-cover shadow-xl"
+                    />
+                ) : (
+                    <div className="flex h-15 w-15 items-center justify-center rounded-full border-4 border-zinc-950 bg-zinc-800 text-3xl font-bold text-white shadow-xl">
+                        {name.charAt(0).toUpperCase()}
+                    </div>
+                )}
                 <span className="text-xl text-zinc-300 transition-colors group-hover:text-purple-400">
                     {name}
                 </span>

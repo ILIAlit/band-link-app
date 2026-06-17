@@ -17,7 +17,7 @@ import release from '@/routes/release';
 
 export default function CreateReleaseDialog() {
     return (
-        <div className={'flex justify-center'}>
+        <div className={'flex items-center justify-center'}>
             <Dialog>
                 <DialogTrigger>
                     <Button

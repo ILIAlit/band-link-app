@@ -44,11 +44,17 @@ export default function UserProfile({
             <div className="relative mb-12">
                 <div className="h-48 rounded-2xl bg-gradient-to-r from-purple-900 to-pink-900"></div>
                 <div className="absolute -bottom-16 left-8 flex items-end gap-6">
-                    <img
-                        src={profileData?.avatar}
-                        alt={`${user.name}'s avatar`}
-                        className="h-32 w-32 rounded-full border-4 border-zinc-950 object-cover shadow-xl"
-                    />
+                    {profileData?.avatar ? (
+                        <img
+                            src={profileData?.avatar}
+                            alt={`${user.name}'s avatar`}
+                            className="h-32 w-32 rounded-full border-4 border-zinc-950 object-cover shadow-xl"
+                        />
+                    ) : (
+                        <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-zinc-950 bg-zinc-800 text-3xl font-bold text-white shadow-xl">
+                            {user.name.charAt(0).toUpperCase()}
+                        </div>
+                    )}
 
                     <div className="mb-4">
                         <h1 className="mb-2 text-4xl font-bold text-white">

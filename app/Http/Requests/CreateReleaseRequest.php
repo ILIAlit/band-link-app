@@ -16,7 +16,13 @@ class CreateReleaseRequest extends FormRequest
     {
         return [
             'cover' => 'image|mimes:jpeg,png,jpg,gif',
-            'title' => 'required'
+            'title' => 'required',
+            'coverSrc' => 'nullable',
+            'links'=> 'array',
+            'spotify_url'=> 'nullable',
+            'apple_music_url'=> 'nullable',
+            'youtube_music_url'=> 'nullable',
+            'sound_cloud_url'=> 'nullable',
         ];
     }
 }

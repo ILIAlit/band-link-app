@@ -16,14 +16,6 @@ export default function Welcome() {
     console.log(page);
 
     const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
-    // const sortedReleases = useMemo(() => {
-    //     return [...releaseData].sort((a, b) => {
-    //         const dateA = new Date(a.release_date).getTime();
-    //         const dateB = new Date(b.release_date).getTime();
-
-    //         return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-    //     });
-    // }, [sortOrder]);
 
     return (
         <>
@@ -43,6 +35,7 @@ export default function Welcome() {
                         <Calendar className="h-5 w-5 text-zinc-400" />
 
                         <select
+                            disabled
                             value={sortOrder}
                             onChange={(e) =>
                                 setSortOrder(
